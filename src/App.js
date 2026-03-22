@@ -1,23 +1,30 @@
 
 import React from 'react';
+import axios from 'axios';
 
 class App extends React.Component {
   state = {
-    count: 0
+    isLoading: true,
+    movies: []
   };
-  add = () => {
-    console.log("add");
+
+  getMovies = async () => {
+    const {
+      data: {
+        movies
+      }
+    } = await axios.get('https://movies-api.accel.li/api/v2/list_movies.json');
+    this.setState({ movies, isLoading: false });
   }
-  minus = () => {
-    console.log("minus");
+
+  componentDidMount() {
+    this.getMovies();
   }
+
   render() {
+    const { isLoading } = this.state;
     return (
-      <div>
-        <h1>This number is: {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
+      <div>{isLoading ? "Loading..." : "we are ready"}</div>
     );
   }
 }
